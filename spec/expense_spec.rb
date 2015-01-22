@@ -30,19 +30,60 @@ describe('Expense') do
     end
   end
 
+  describe("#add_category") do
+    it("will add a category to an expense") do
+      test_category = Category.new({:name => "travel"})
+      test_category.save()
+      test_expense = Expense.new({:description => "Thailand", :amount => 100.00, :date => "2011-05-15"})
+      test_expense.save()
+      test_expense.add_category(test_category)
+      expect(test_expense.category_is()).to(eq([test_category.name()]))
+    end
+
+    it("will allow for an expense to have multiple categories") do
+      test_category = Category.new({:name => "travel"})
+      test_category.save()
+      test_category2 = Category.new({:name => "leisure"})
+      test_category2.save()
+      test_expense = Expense.new({:description => "Thailand", :amount => 100.00, :date => "2011-05-15"})
+      test_expense.save()
+      test_expense.add_category(test_category)
+      test_expense.add_category(test_category2)
+      expect(test_expense.category_is()).to(eq([test_category.name(),test_category2.name()]))
+    end
+  end
+
   describe("#category_is") do
     it("will return the category name that an expense is in") do
       test_category = Category.new({:name => "dining out"})
       test_category.save()
-      test_expense = Expense.new({:description => "drinks", :date => "2015-01-10", :amount => 14.99, :category_id => test_category.id()})
+      test_expense = Expense.new({:description => "drinks", :date => "2015-01-10", :amount => 14.99})
       test_expense.save()
-      expect(test_expense.category_is()).to(eq("dining out"))
+      test_expense.add_category(test_category)
+      expect(test_expense.category_is()).to(eq([test_category.name()]))
     end
+  end
+
+  describe(".percentage") do
+    it("will return how many percent of the expenses was used in a desired category") do
+      test_category = Category.new({:name => "travel"})
+      test_category.save()
+      test_expense = Expense.new({:description => "Thailand", :amount => 100.00, :date => "2011-05-15"})
+      test_expense.save()
+      test_expense.add_category(test_category)
+      test_category1 = Category.new({:name => "drugs"})
+      test_category1.save()
+      test_expense = Expense.new({:description => "145th Ave Secret", :amount => 300.00, :date => "2011-05-15"})
+      test_expense.save()
+      test_expense.add_category(test_category1)
+      expect(Expense.percentage(test_category)).to(eq(0.25))
+    end
+
   end
 
   describe("#save") do
     it("saves the expense into the expense database") do
-      test_expense = Expense.new({:description => "Cups", :date => "2015-01-19", :amount => 3.49, :category_id => 2})
+      test_expense = Expense.new({:description => "Cups", :date => "2015-01-19", :amount => 3.49})
       test_expense.save()
       expect(Expense.all()).to(eq([test_expense]))
     end
