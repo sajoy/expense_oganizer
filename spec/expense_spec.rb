@@ -30,6 +30,33 @@ describe('Expense') do
     end
   end
 
+  describe("#save") do
+    it("saves the expense into the expense database") do
+      test_expense = Expense.new({:description => "Cups", :date => "2015-01-19", :amount => 3.49})
+      test_expense.save()
+      expect(Expense.all()).to(eq([test_expense]))
+    end
+  end
+
+  describe("#all") do
+    it("starts empty") do
+      expect(Expense.all()).to(eq([]))
+    end
+  end
+
+  describe("#==") do
+    it("says two expenses are equal if all of the attributes are the same") do
+      test_expense1 = Expense.new({:description => "headphones", :date => "2014-11-11", :amount => 145})
+      test_expense2 = Expense.new({:description => "headphones", :date => "2014-11-11", :amount => 145})
+      expect(test_expense1).to(eq(test_expense2))
+    end
+  end
+
+
+
+
+# CATEGORY METHOD SPECS
+
   describe("#add_category") do
     it("will add a category to an expense") do
       test_category = Category.new({:name => "travel"})
@@ -78,30 +105,34 @@ describe('Expense') do
       test_expense.add_category(test_category1)
       expect(Expense.percentage(test_category)).to(eq(0.25))
     end
-
   end
 
-  describe("#save") do
-    it("saves the expense into the expense database") do
-      test_expense = Expense.new({:description => "Cups", :date => "2015-01-19", :amount => 3.49})
+# COMPANY METHOD SPECS
+
+
+  describe("#add_company") do
+    it("will add a company to an expense") do
+      test_company = Company.new({:name => "McDs"})
+      test_company.save()
+      test_expense = Expense.new({:description => "fries", :amount => 100.00, :date => "2011-05-15"})
       test_expense.save()
-      expect(Expense.all()).to(eq([test_expense]))
+      test_expense.add_company(test_company)
+      expect(test_expense.company_is()).to(eq([test_company.name()]))
     end
   end
 
-  describe("#all") do
-    it("starts empty") do
-      expect(Expense.all()).to(eq([]))
+  describe("#company_is") do
+    it("will return the company name of the purchase") do
+      test_company = Company.new({:name => "McDs"})
+      test_company.save()
+      test_expense = Expense.new({:description => "milkshake", :date => "2015-01-10", :amount => 14.99})
+      test_expense.save()
+      test_expense.add_company(test_company)
+      expect(test_expense.company_is()).to(eq([test_company.name()]))
     end
   end
 
-  describe("#==") do
-    it("says two expenses are equal if all of the attributes are the same") do
-      test_expense1 = Expense.new({:description => "headphones", :date => "2014-11-11", :amount => 145})
-      test_expense2 = Expense.new({:description => "headphones", :date => "2014-11-11", :amount => 145})
-      expect(test_expense1).to(eq(test_expense2))
-    end
-  end
+
 
 
 end

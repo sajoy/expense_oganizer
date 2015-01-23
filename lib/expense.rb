@@ -75,4 +75,28 @@ class Expense
   end
 
 
+
+  define_method(:add_company) do |company|
+    DB.exec("INSERT INTO companies_expenses (expense_id, company_id) VALUES (#{self.id()}, #{company.id()});")
+  end
+
+  define_method(:company_is) do
+    company = DB.exec("SELECT companies.* FROM
+    expenses JOIN companies_expenses ON (expenses.id = companies_expenses.expense_id)
+    JOIN companies ON (companies_expenses.company_id = companies.id)
+    WHERE expenses.id = #{self.id()};")
+
+    array = []
+    company.each() do |company|
+      name = company.fetch("name")
+      id = company.fetch("id")
+      new_company = Company.new({:name => name, :id => id})
+
+      array.push(new_company.name())
+    end
+    array
+  end
+
+
+
 end

@@ -39,4 +39,26 @@ describe('Category') do
     end
   end
 
+  describe("#company_percentage") do
+    it("will return how many percent of the category expenses was used in a desired company") do
+      test_category = Category.new({:name => "Food"})
+      test_category.save()
+
+      test_expense = Expense.new({:description => "Burger", :amount => 100.00, :date => "2011-05-15"})
+      test_expense.save()
+      test_expense.add_category(test_category)
+      test_company = Company.new({:name => "McDs"})
+      test_company.save()
+      test_expense.add_company(test_company)
+
+      test_expense = Expense.new({:description => "Burger", :amount => 300.00, :date => "2011-05-15"})
+      test_expense.save()
+      test_expense.add_category(test_category)
+      test_company1 = Company.new({:name => "Burger King"})
+      test_company1.save()
+      test_expense.add_company(test_company1)
+      expect(test_category.company_percentage(test_company)).to(eq(0.25))
+    end
+  end
+
 end
