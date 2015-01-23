@@ -39,6 +39,17 @@ describe('Category') do
     end
   end
 
+  describe("#budget_status") do
+    it("will check if a category is over budget") do
+      test_category = Category.new({:name => "drugs", :budget => 350})
+      test_category.save()
+      test_expense = Expense.new({:description => "crackrock", :amount => 500, :date => "2015-01-21"})
+      test_expense.save()
+      test_expense.add_category(test_category)
+      expect(test_category.budget_status()).to(eq("You are over budget."))
+    end
+  end
+
   describe("#company_percentage") do
     it("will return how many percent of the category expenses was used in a desired company") do
       test_category = Category.new({:name => "Food"})

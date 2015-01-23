@@ -1,9 +1,10 @@
 class Category
-  attr_reader(:name, :id)
+  attr_reader(:name, :id, :budget)
 
   define_method(:initialize) do |attributes|
     @name = attributes[:name]
     @id = attributes[:id]
+    @budget = attributes[:budget]
   end
 
   define_method(:save) do
@@ -24,6 +25,24 @@ class Category
 
   define_method(:==) do |other_cat|
     self.name() == other_cat.name()
+  end
+
+  define_method(:budget_status) do
+    total_expenses_of_category = 0
+    category_expenses = DB.exec("SELECT expenses.* FROM
+    categories JOIN expenses_categories ON (categories.id = expenses_categories.category_id)
+    JOIN expenses ON (expenses_categories.expense_id = expenses.id)
+    WHERE categories.id = #{self.id()};")
+    category_expenses.each() do |expense|
+      amount = expense.fetch("amount").to_f()
+      total_expenses_of_category += amount
+    end
+
+    if total_expenses_of_category > self.budget()
+      "You are over budget."
+    else
+      "Spend more!"
+    end
   end
 
 
