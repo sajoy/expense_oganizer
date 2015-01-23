@@ -9,6 +9,7 @@ Don't do drugs, unless they're pure.
 
 Database Tables
 
+```
               List of relations
  Schema |        Name         | Type  | Owner
 --------+---------------------+-------+-------
@@ -17,6 +18,8 @@ Database Tables
  public | companies_expenses  | table | Guest
  public | expenses            | table | Guest
  public | expenses_categories | table | Guest
+```
+```
 
 
                               Table "public.categories"
@@ -27,6 +30,8 @@ Database Tables
  budget | numeric(9,2)      |
 Indexes:
     "categories_pkey" PRIMARY KEY, btree (id)
+```
+```
 
                                  Table "public.companies"
  Column |       Type        |                      Modifiers
@@ -35,8 +40,9 @@ Indexes:
  name   | character varying |
 Indexes:
     "company_pkey" PRIMARY KEY, btree (id)
-
-                               Table "public.companies_expenses"
+```
+```
+                           Table "public.companies_expenses"
    Column   |  Type   |                            Modifiers
 ------------+---------+-----------------------------------------------------------------
  id         | integer | not null default nextval('companies_expenses_id_seq'::regclass)
@@ -44,6 +50,8 @@ Indexes:
  expense_id | integer |
 Indexes:
     "companies_expenses_pkey" PRIMARY KEY, btree (id)
+```
+```
 
                                      Table "public.expenses"
    Column    |       Type        |                       Modifiers
@@ -54,6 +62,8 @@ Indexes:
  description | character varying |
 Indexes:
     "expenses_pkey" PRIMARY KEY, btree (id)
+```
+```
 
                             Table "public.expenses_categories"
    Column    |  Type   |                            Modifiers
